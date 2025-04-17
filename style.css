@@ -1,0 +1,99 @@
+:root {
+  --color-black: #171717;
+  --color-white: #ffffff;
+  --color-light-gray: #eeeeee;
+  --color-beige: #ddd9b4;
+  --color-lavender: #d4bad9;
+
+  --font-primary: "Inter", sans-serif;
+
+  --text-h1: 2.5rem;
+  --text-body: 1rem;
+  --text-body-large: 1.25rem;
+}
+
+/* General styles */
+
+body {
+  font-family: var(--font-primary);
+  color: var(--color-black);
+  background-color: var(--color-white);
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: var(--text-h1);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.body-text {
+  font-size: var(--text-body);
+  line-height: 1.5;
+}
+
+.body-large {
+  font-size: var(--text-body-large);
+  line-height: 1.6;
+}
+
+/* Buttons, labels */
+.label {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.label-beige {
+  background-color: var(--color-beige);
+  color: var(--color-black);
+}
+
+.label-lavender {
+  background-color: var(--color-lavender);
+  color: var(--color-black);
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button-primary {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.button-primary:hover {
+  background-color: #2a2a2a;
+}
+
+.button-secondary {
+  background-color: var(--color-light-gray);
+  color: var(--color-black);
+}
+
+.button-secondary:hover {
+  background-color: #dddddd;
+}
+
+/* Product element */
+.product-title {
+  font-size: var(--text-body-large);
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.browse-featured {
+  font-size: var(--text-h1);
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+}
