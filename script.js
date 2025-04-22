@@ -1,6 +1,8 @@
 const BASE_URL = "https://brandstestowy.smallhost.pl/api";
 
 const menu = document.getElementById("menu");
+const arrow = document.getElementById("swiper-button-next");
+let sliderSwipe = 0;
 
 function createProductCards(products) {
   const wrapper = document.getElementById("product-wrapper");
@@ -18,7 +20,7 @@ function createProductCards(products) {
     }
 
     slide.innerHTML = `
-      <div class="product-card">
+      <div class="product-card animation">
         <div class="product-image">
           <img src="${product.image}" alt="${product.text}">
           ${
@@ -93,7 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
         spaceBetween: 20,
       },
     },
-    // Add these event handlers to update your progress bar
     on: {
       init: function () {
         updateProgressBar(this);
@@ -102,19 +103,43 @@ document.addEventListener("DOMContentLoaded", function () {
         updateProgressBar(this);
       },
     },
+    transitionEnd: function () {
+      updateProgressBar(this);
+    },
   });
 
   fetchProducts();
 });
 
+arrow.addEventListener("click", () => {
+  if (sliderSwipe === 9) {
+    sliderSwipe = 0;
+  } else {
+    sliderSwipe++;
+  }
+});
+
 function updateProgressBar(swiper) {
   const progressBar = document.getElementById("swiper-progress-bar");
-  const totalSlides = swiper.slides.length - swiper.loopedSlides * 2;
-  const currentIndex = swiper.realIndex;
+  const sliderLength = document.getElementsByClassName("animation").length - 3;
 
-  let progress = (currentIndex / (totalSlides - 1)) * 100;
+  let progress;
+  if (sliderSwipe < 6) {
+    progress = 25 + (sliderSwipe / sliderLength) * 100;
+    console.log(progress);
+  } else if (sliderSwipe >= 6) {
+    progress = 100;
+    console.log(progress);
+  } else {
+    progress = 25;
+  }
 
   if (progress < 25) progress = 25;
+  if (progress > 100) progress = 100;
+
+  if (sliderSwipe === 0) {
+    progress = 25;
+  }
 
   progressBar.style.width = progress + "%";
 }
