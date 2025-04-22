@@ -74,7 +74,20 @@
         </div>
       </div>
     </section>
-    <section id="products" class="full-width product-display"></section>
+    <section id="products" class="full-width product-display">
+      <div class="controls">
+        <span>NUMBER OF PRODUCTS PER PAGE</span>
+        <select id="itemsPerPage">
+          <option value="10">10</option>
+          <option value="14" selected>14</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="40">40</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+    </section>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.2.0/swiper-bundle.min.js"></script>
   <script src="script.js"></script>
