@@ -9,6 +9,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.2.0/swiper-bundle.min.css">
     <link rel="stylesheet" href="./style.css" />
     <title>Forma'Sint</title>
   </head>
@@ -31,7 +32,7 @@
           >
           <p class="logo-additional-line">Idomods &lt;/&gt;</p>
         </div>
-        <div class="menu">
+        <div class="menu" id="menu">
           <ul>
             <li><a href="#home">Home</a></li>
             <li><a href="#featured">Featured products</a></li>
@@ -53,9 +54,17 @@
       </section>
     </header>
 
-    <section id="featured" class="full-width swiper-carousel"></section>
-
+    <section id="featured" class="full-width">
+      <div class="container">
+        <div class="swiper product-swiper">
+          <div class="swiper-wrapper" id="product-wrapper">
+          </div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-next"><img src="./images/icons/SLIDER_ARROW.png" /></div>
+        </div>
+      </div>
     <section id="products" class="full-width product-display"></section>
   </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.2.0/swiper-bundle.min.js"></script>
   <script src="script.js"></script>
 </html>
