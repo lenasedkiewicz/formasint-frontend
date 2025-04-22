@@ -74,13 +74,10 @@ document.addEventListener("DOMContentLoaded", function () {
   window.productSwiper = new Swiper(".product-swiper", {
     slidesPerView: 1,
     spaceBetween: 10,
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
+    loop: true,
+    loopAdditionalSlides: 10,
     navigation: {
       nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
     },
     breakpoints: {
       768: {
@@ -96,19 +93,31 @@ document.addEventListener("DOMContentLoaded", function () {
         spaceBetween: 20,
       },
     },
+    // Add these event handlers to update your progress bar
+    on: {
+      init: function () {
+        updateProgressBar(this);
+      },
+      slideChange: function () {
+        updateProgressBar(this);
+      },
+    },
   });
 
   fetchProducts();
-
-  document
-    .querySelector(".product-swiper")
-    .addEventListener("click", function (e) {
-      const heartIcon = e.target.closest(".heart-icon");
-      if (heartIcon) {
-        heartIcon.classList.toggle("active");
-      }
-    });
 });
+
+function updateProgressBar(swiper) {
+  const progressBar = document.getElementById("swiper-progress-bar");
+  const totalSlides = swiper.slides.length - swiper.loopedSlides * 2;
+  const currentIndex = swiper.realIndex;
+
+  let progress = (currentIndex / (totalSlides - 1)) * 100;
+
+  if (progress < 25) progress = 25;
+
+  progressBar.style.width = progress + "%";
+}
 
 menu.querySelectorAll('ul li a[href^="#"]').forEach((link) => {
   link.addEventListener("click", (e) => {

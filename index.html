@@ -9,7 +9,10 @@
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.2.0/swiper-bundle.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.2.0/swiper-bundle.min.css"
+    />
     <link rel="stylesheet" href="./style.css" />
     <title>Forma'Sint</title>
   </head>
@@ -59,12 +62,18 @@
       <h1><i>Browse featured</i></h1>
       <div class="container">
         <div class="swiper product-swiper">
-          <div class="swiper-wrapper" id="product-wrapper">
+          <div class="swiper-wrapper" id="product-wrapper"></div>
+          <div class="swiper-button-next">
+            <img src="./images/icons/SLIDER_ARROW.png" />
           </div>
-          <div class="swiper-pagination"></div>
-          <div class="swiper-button-next"><img src="./images/icons/SLIDER_ARROW.png" /></div>
         </div>
       </div>
+      <div class="custom-pagination-container">
+        <div class="custom-pagination">
+          <div class="progress-bar" id="swiper-progress-bar"></div>
+        </div>
+      </div>
+    </section>
     <section id="products" class="full-width product-display"></section>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.2.0/swiper-bundle.min.js"></script>

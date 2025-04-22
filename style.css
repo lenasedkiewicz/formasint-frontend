@@ -269,6 +269,58 @@ header.full-width {
   height: 100%;
 }
 
+.swiper-button-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+  width: 44px;
+  height: 44px;
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-button-next img {
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.swiper-button-next::after {
+  display: none;
+}
+
+.custom-pagination-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.custom-pagination {
+  display: flex;
+  height: 4px;
+  width: 50%;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 25%; /* Starting at 25% filled */
+  background-color: #333;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
 #featured h1,
 #featured p {
   line-height: 1.5;
