@@ -1,4 +1,5 @@
 const BASE_URL = "https://brandstestowy.smallhost.pl/api";
+const SLIDER_ITEMS = 10;
 
 const menu = document.getElementById("menu");
 const arrow = document.getElementById("swiper-button-next");
@@ -42,9 +43,11 @@ function createProductCards(products) {
   });
 }
 
-async function fetchProducts(pageNumber = 1, pageSize = 16) {
+async function fetchProducts(pageNumber, pageSize) {
   try {
-    const response = await fetch(`${BASE_URL}/random`);
+    const response = await fetch(
+      `${BASE_URL}/random?pagenumber=${pageNumber}&pageSize=${pageSize}`
+    );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -108,11 +111,11 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   });
 
-  fetchProducts();
+  fetchProducts(1, SLIDER_ITEMS);
 });
 
 arrow.addEventListener("click", () => {
-  if (sliderSwipe === 9) {
+  if (sliderSwipe === SLIDER_ITEMS - 1) {
     sliderSwipe = 0;
   } else {
     sliderSwipe++;

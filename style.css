@@ -15,6 +15,7 @@
   --font-primary: "Inter", sans-serif;
 
   --text-h1: 2.5rem;
+  --text-h3: 1.6rem;
   --text-body: 1rem;
   --text-body-large: 1.25rem;
 }
@@ -33,6 +34,10 @@ h1 {
   font-size: var(--text-h1);
   font-weight: 700;
   line-height: 1.2;
+}
+
+h3 {
+  font-size: var(--text-h3);
 }
 
 .body-text {
@@ -252,12 +257,6 @@ header.full-width {
   background-color: var(--color-lavender);
 }
 
-.product-title {
-  font-size: var(--text-body-large);
-  color: var(--color-black);
-  margin-bottom: 0.5rem;
-}
-
 /* Featured section */
 
 #featured {
@@ -302,7 +301,7 @@ header.full-width {
 
 .custom-pagination {
   display: flex;
-  height: 3px;
+  height: 1px;
   width: 100%;
   background-color: var(--color-light-gray);
   border-radius: 2px;
@@ -352,18 +351,17 @@ header.full-width {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  font-style: italic;
 }
 
 .product-title {
-  font-size: 14px;
-  font-weight: normal;
   margin-bottom: 8px;
   line-height: 1.3;
 }
 
 .product-price {
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 400;
   margin-top: auto;
 }
 
@@ -371,6 +369,12 @@ header.full-width {
 
 @media all and (max-width: 1280px) {
   p.logo-additional-line {
+    display: none;
+  }
+}
+
+@media all and (max-width: 1200px) {
+  .custom-pagination-container {
     display: none;
   }
 }
@@ -423,7 +427,7 @@ header.full-width {
   }
 
   .product-title {
-    font-size: var(--text-body);
+    font-size: var(--text-body-large);
     margin-bottom: 0.3rem;
   }
 
