@@ -124,6 +124,31 @@ header.full-width {
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.top-bar .logo span .logo-light,
+.top-bar .logo span .logo-dark {
+  display: block;
+  width: 100%;
+  max-width: 24px;
+  height: auto;
+  transition: opacity 0.3s;
+}
+
+.top-bar .logo span .logo-dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.top-bar .logo span:hover .logo-light {
+  opacity: 0;
+}
+
+.top-bar .logo span:hover .logo-dark {
+  opacity: 1;
 }
 
 .top-bar .menu ul {
@@ -182,8 +207,30 @@ header.full-width {
   margin-bottom: 1.5rem;
 }
 
+/* Smaller desktop*/
+
+@media all and (max-width: 1280px) {
+  p.logo-additional-line {
+    display: none;
+  }
+}
+
+/* Tablet */
+
+@media all and (max-width: 992px) {
+  .top-bar .user {
+    display: none;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .top-bar .user {
+    display: none;
+  }
+}
+
 /* Mobile view */
-@media screen and (max-width: 575px) {
+@media all and (max-width: 575px) {
   :root {
     --text-h1: 1.75rem;
     --text-body: 0.875rem;
