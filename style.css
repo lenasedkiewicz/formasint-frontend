@@ -180,11 +180,18 @@ header.full-width {
   flex-direction: column;
   gap: 42px;
   padding: 80px 0 42px 0;
+  height: calc(100vh - 88px);
 }
 
 .hero img {
   width: 100%;
   height: auto;
+}
+.hero img:not(.heading) {
+  width: auto;
+  height: 100%;
+  object-fit: cover;
+  overflow: hidden;
 }
 
 .hero img.heading {
