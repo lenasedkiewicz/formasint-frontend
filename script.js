@@ -3,7 +3,22 @@ const SLIDER_ITEMS = 10;
 
 const menu = document.getElementById("menu");
 const arrow = document.getElementById("swiper-button-next");
+const productGrid = document.getElementById("productGrid");
+const itemsPerPageSelect = document.getElementById("itemsPerPage");
+
 let sliderSwipe = 0;
+let pageSize = 14;
+
+menu.querySelectorAll('ul li a[href^="#"]').forEach((link) => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const id = link.getAttribute("href").substring(1);
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+});
 
 function createProductCards(products) {
   const wrapper = document.getElementById("product-wrapper");
@@ -22,7 +37,6 @@ function createProductCards(products) {
 
     slide.innerHTML = `
       <div class="product-card animation">
-        
         <div class="product-image">
           <img src="${product.image}" alt="${product.text}">
           ${
@@ -153,13 +167,53 @@ function updateProgressBar(swiper) {
   progressBar.style.width = progress + "%";
 }
 
-menu.querySelectorAll('ul li a[href^="#"]').forEach((link) => {
-  link.addEventListener("click", (e) => {
-    e.preventDefault();
-    const id = link.getAttribute("href").substring(1);
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+function renderProductGrid(products) {
+  productGrid.innerHTML = "";
+
+  if (products.length === 0) {
+    productGrid.innerHTML = "<p>No products found.</p>";
+    return;
+  }
+
+  products.forEach((product, index) => {
+    const productCard = document.createElement("div");
+    productCard.className = "product-card animation";
+    productCard.innerHTML = `
+          <div class="product-image">
+              <img src="${product.image}" alt="${product.text}">
+              <div class="badge id">${product.id}</div>
+          </div>
+      `;
+
+    if (index === 5) {
+      const promoCell = document.createElement("div");
+      promoCell.className = "promo-cell";
+      promoCell.innerHTML = `
+              <div class="promo-title">You'll look and feel like the champion.</div>
+              <img class="promo-image" src="https://example.com/champion.jpg" alt="Champion">
+              <button class="promo-button">Check it out</button>
+          `;
+      productGrid.appendChild(promoCell);
     }
+
+    productGrid.appendChild(productCard);
   });
+}
+
+fetchProducts(1, pageSize).then((response) => {
+  renderProductGrid(response.data);
+});
+
+itemsPerPageSelect.addEventListener("change", function (e) {
+  pageSize = parseInt(e.target.value);
+
+  fetchProducts(1, pageSize)
+    .then((response) => {
+      renderProductGrid(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+      productGrid.innerHTML =
+        "<p>Failed to load products. Please try again later.</p>";
+    });
 });
