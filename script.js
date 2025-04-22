@@ -22,11 +22,17 @@ function createProductCards(products) {
 
     slide.innerHTML = `
       <div class="product-card animation">
+        
         <div class="product-image">
           <img src="${product.image}" alt="${product.text}">
           ${
-            product.badge
-              ? `<div class="badge ${badgeClass}">${product.badge}</div>`
+            product.id === 1 || product.id === 4
+              ? `<div class="badge bestseller">BESTSELLER</div>`
+              : ""
+          }
+          ${
+            product.id === 2
+              ? `<div class="badge limited">LIMITED EDITION</div>`
               : ""
           }
           <img class="favorite-empty" src="./images/icons/icon_favorite.png" />
