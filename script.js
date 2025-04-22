@@ -190,7 +190,6 @@ function renderProductGrid(products) {
       promoCell.className = "promo-cell";
       promoCell.innerHTML = `
               <div class="promo-title">You'll look and feel like the champion.</div>
-              <img class="promo-image" src="https://example.com/champion.jpg" alt="Champion">
               <button class="promo-button">Check it out</button>
           `;
       productGrid.appendChild(promoCell);

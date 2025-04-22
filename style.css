@@ -364,6 +364,61 @@ header.full-width {
   font-weight: 400;
   margin-top: auto;
 }
+/* Product grid */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.promo-cell {
+  grid-column: span 2;
+  grid-row: span 1;
+  background-image: url(./images/banner/banner_desktop.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.promo-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.promo-image {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+
+.promo-button {
+  background-color: white;
+  color: #3494e6;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+
+.promo-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
 
 /* Smaller desktop*/
 
@@ -376,6 +431,28 @@ header.full-width {
 @media all and (max-width: 1200px) {
   .custom-pagination-container {
     display: none;
+  }
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .promo-cell {
+    grid-column: 1 / -1;
+    grid-row: 3 / span 2;
+    order: 1;
+    height: 498px;
+    background-size: cover;
+  }
+
+  .product-card:nth-child(1),
+  .product-card:nth-child(2),
+  .product-card:nth-child(3),
+  .product-card:nth-child(4) {
+    order: 0;
+  }
+
+  .product-card:nth-child(n + 5) {
+    order: 2;
   }
 }
 
@@ -390,6 +467,30 @@ header.full-width {
 @media all and (max-width: 768px) {
   .top-bar .user {
     display: none;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .promo-cell {
+    grid-column: 1 / -1;
+    grid-row: 3 / span 2;
+    order: 1;
+    background-image: url(./images/banner/banner_mobile.png);
+    height: 498px;
+    background-size: cover;
+  }
+
+  .product-card:nth-child(1),
+  .product-card:nth-child(2),
+  .product-card:nth-child(3),
+  .product-card:nth-child(4) {
+    order: 0;
+  }
+
+  .product-card:nth-child(n + 5) {
+    order: 2;
   }
 }
 
