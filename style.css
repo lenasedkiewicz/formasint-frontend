@@ -366,6 +366,21 @@ header.full-width {
 }
 /* Product grid */
 
+.controls {
+  padding-bottom: 64px;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.controls select {
+  outline: none;
+}
+
+.controls option {
+  border: none;
+}
+
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

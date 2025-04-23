@@ -4,10 +4,14 @@ const SLIDER_ITEMS = 10;
 const menu = document.getElementById("menu");
 const arrow = document.getElementById("swiper-button-next");
 const productGrid = document.getElementById("productGrid");
-const itemsPerPageSelect = document.getElementById("itemsPerPage");
 
 let sliderSwipe = 0;
+let currentPage = 1;
 let pageSize = 14;
+let currentlyRequestedItems = 14;
+let isLoading = false;
+let allProductsLoaded = false;
+let allLoadedProducts = [];
 
 menu.querySelectorAll('ul li a[href^="#"]').forEach((link) => {
   link.addEventListener("click", (e) => {
@@ -71,7 +75,9 @@ async function fetchProducts(pageNumber, pageSize) {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-
+    console.log(
+      `${BASE_URL}/random?pagenumber=${pageNumber}&pageSize=${pageSize}`
+    );
     const data = await response.json();
 
     if (data && data.data && Array.isArray(data.data)) {
@@ -149,10 +155,8 @@ function updateProgressBar(swiper) {
   let progress;
   if (sliderSwipe < 6) {
     progress = 25 + (sliderSwipe / sliderLength) * 100;
-    console.log(progress);
   } else if (sliderSwipe >= 6) {
     progress = 100;
-    console.log(progress);
   } else {
     progress = 25;
   }
@@ -179,19 +183,19 @@ function renderProductGrid(products) {
     const productCard = document.createElement("div");
     productCard.className = "product-card animation";
     productCard.innerHTML = `
-          <div class="product-image">
-              <img src="${product.image}" alt="${product.text}">
-              <div class="badge id">${product.id}</div>
-          </div>
-      `;
+      <div class="product-image">
+        <img src="${product.image}" alt="${product.text}">
+        <div class="badge id">${product.id}</div>
+      </div>
+    `;
 
-    if (index === 5) {
+    if (index % pageSize === 5 && index !== 0) {
       const promoCell = document.createElement("div");
       promoCell.className = "promo-cell";
       promoCell.innerHTML = `
-              <div class="promo-title">You'll look and feel like the champion.</div>
-              <button class="promo-button">Check it out</button>
-          `;
+        <div class="promo-title">You'll look and feel like the champion.</div>
+        <button class="promo-button">Check it out</button>
+      `;
       productGrid.appendChild(promoCell);
     }
 
@@ -199,20 +203,129 @@ function renderProductGrid(products) {
   });
 }
 
-fetchProducts(1, pageSize).then((response) => {
-  renderProductGrid(response.data);
-});
+function loadInitialProducts() {
+  currentlyRequestedItems = pageSize;
+  allProductsLoaded = false;
 
-itemsPerPageSelect.addEventListener("change", function (e) {
-  pageSize = parseInt(e.target.value);
+  console.log(`Initial load with pageSize = ${pageSize}`);
 
   fetchProducts(1, pageSize)
     .then((response) => {
-      renderProductGrid(response.data);
+      allLoadedProducts = [...response.data];
+      renderProductGrid(allLoadedProducts);
+
+      if (response.data.length < pageSize) {
+        allProductsLoaded = true;
+      }
     })
     .catch((error) => {
       console.error("Error fetching products:", error);
       productGrid.innerHTML =
         "<p>Failed to load products. Please try again later.</p>";
     });
+}
+
+function loadMoreProducts() {
+  if (isLoading || allProductsLoaded) return;
+
+  isLoading = true;
+
+  currentlyRequestedItems += pageSize;
+
+  const loadingIndicator = document.createElement("div");
+  loadingIndicator.id = "loadingIndicator";
+  loadingIndicator.className = "loading-indicator";
+  loadingIndicator.textContent = "Loading more products...";
+  productGrid.appendChild(loadingIndicator);
+
+  fetchProducts(1, currentlyRequestedItems)
+    .then((response) => {
+      const indicator = document.getElementById("loadingIndicator");
+      if (indicator && indicator.parentNode) {
+        indicator.parentNode.removeChild(indicator);
+      }
+
+      if (response.data && response.data.length > 0) {
+        console.log(`Received ${response.data.length} products total`);
+        allLoadedProducts = [...response.data];
+
+        renderProductGrid(allLoadedProducts);
+
+        if (response.data.length < currentlyRequestedItems) {
+          console.log("All products loaded (received fewer than requested)");
+          allProductsLoaded = true;
+        }
+      } else {
+        console.log("No more products available");
+        allProductsLoaded = true;
+      }
+
+      isLoading = false;
+    })
+    .catch((error) => {
+      const indicator = document.getElementById("loadingIndicator");
+      if (indicator && indicator.parentNode) {
+        indicator.parentNode.removeChild(indicator);
+      }
+
+      console.error("Error fetching more products:", error);
+      const errorMessage = document.createElement("div");
+      errorMessage.className = "error-message";
+      errorMessage.textContent =
+        "Failed to load more products. Please try again later.";
+      productGrid.appendChild(errorMessage);
+
+      isLoading = false;
+    });
+}
+
+function handlePageSizeChange(newPageSize) {
+  const oldPageSize = pageSize;
+  pageSize = newPageSize;
+
+  currentlyRequestedItems = newPageSize;
+  allProductsLoaded = false;
+
+  console.log(`Page size changed from ${oldPageSize} to ${newPageSize}`);
+
+  fetchProducts(1, currentlyRequestedItems)
+    .then((response) => {
+      allLoadedProducts = [...response.data];
+      renderProductGrid(allLoadedProducts);
+
+      if (response.data.length < currentlyRequestedItems) {
+        console.log("All products loaded (received fewer than requested)");
+        allProductsLoaded = true;
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+      productGrid.innerHTML =
+        "<p>Failed to load products. Please try again later.</p>";
+    });
+}
+
+function checkScroll() {
+  const scrollPosition = window.innerHeight + window.scrollY;
+  const bodyHeight = document.body.offsetHeight;
+  const bottomThreshold = 200;
+
+  if (
+    scrollPosition >= bodyHeight - bottomThreshold &&
+    !isLoading &&
+    !allProductsLoaded
+  ) {
+    console.log("Scroll threshold reached, loading more products");
+    loadMoreProducts();
+  }
+}
+
+loadInitialProducts();
+
+const itemsPerPageSelect = document.getElementById("itemsPerPage");
+itemsPerPageSelect.addEventListener("change", function (e) {
+  const newPageSize = parseInt(e.target.value);
+  handlePageSizeChange(newPageSize);
 });
+
+window.addEventListener("scroll", checkScroll);
