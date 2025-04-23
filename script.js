@@ -75,9 +75,6 @@ async function fetchProducts(pageNumber, pageSize) {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    console.log(
-      `${BASE_URL}/random?pagenumber=${pageNumber}&pageSize=${pageSize}`
-    );
     const data = await response.json();
 
     if (data && data.data && Array.isArray(data.data)) {
@@ -207,8 +204,6 @@ function loadInitialProducts() {
   currentlyRequestedItems = pageSize;
   allProductsLoaded = false;
 
-  console.log(`Initial load with pageSize = ${pageSize}`);
-
   fetchProducts(1, pageSize)
     .then((response) => {
       allLoadedProducts = [...response.data];
@@ -246,17 +241,14 @@ function loadMoreProducts() {
       }
 
       if (response.data && response.data.length > 0) {
-        console.log(`Received ${response.data.length} products total`);
         allLoadedProducts = [...response.data];
 
         renderProductGrid(allLoadedProducts);
 
         if (response.data.length < currentlyRequestedItems) {
-          console.log("All products loaded (received fewer than requested)");
           allProductsLoaded = true;
         }
       } else {
-        console.log("No more products available");
         allProductsLoaded = true;
       }
 
@@ -286,15 +278,12 @@ function handlePageSizeChange(newPageSize) {
   currentlyRequestedItems = newPageSize;
   allProductsLoaded = false;
 
-  console.log(`Page size changed from ${oldPageSize} to ${newPageSize}`);
-
   fetchProducts(1, currentlyRequestedItems)
     .then((response) => {
       allLoadedProducts = [...response.data];
       renderProductGrid(allLoadedProducts);
 
       if (response.data.length < currentlyRequestedItems) {
-        console.log("All products loaded (received fewer than requested)");
         allProductsLoaded = true;
       }
     })
@@ -315,7 +304,6 @@ function checkScroll() {
     !isLoading &&
     !allProductsLoaded
   ) {
-    console.log("Scroll threshold reached, loading more products");
     loadMoreProducts();
   }
 }
