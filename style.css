@@ -364,6 +364,16 @@ header.full-width {
   font-weight: 400;
   margin-top: auto;
 }
+
+.product-id {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 3px 8px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  font-weight: 400;
+}
 /* Product grid */
 
 .controls {
@@ -396,18 +406,16 @@ header.full-width {
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  color: white;
-  padding: 20px;
+  padding: 50px;
   text-align: center;
 }
 
 .promo-title {
-  font-size: 24px;
+  font-size: 42px;
   font-weight: bold;
-  margin-bottom: 20px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  margin: 20px 0;
 }
 
 .promo-image {
@@ -418,21 +426,18 @@ header.full-width {
 
 .promo-button {
   background-color: white;
-  color: #3494e6;
+  font-size: 18px;
   border: none;
-  padding: 10px 25px;
-  border-radius: 25px;
-  font-weight: bold;
+  padding: 20px 50px;
+  border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 14px;
 }
 
 .promo-button:hover {
   transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Smaller desktop*/
