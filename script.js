@@ -1,5 +1,5 @@
 const BASE_URL = "https://brandstestowy.smallhost.pl/api";
-const SLIDER_ITEMS = 10;
+const INITIAL_SLIDER_ITEMS = 10; // Changed to INITIAL_SLIDER_ITEMS for clarity
 
 const menu = document.getElementById("menu");
 const menuToggle = document.getElementById("menuToggle");
@@ -7,6 +7,7 @@ const menuClose = document.getElementById("menuClose");
 const overlay = document.getElementById("menuOverlay");
 const arrow = document.getElementById("swiper-button-next");
 const productGrid = document.getElementById("productGrid");
+const productWrapper = document.getElementById("product-wrapper"); // Get the wrapper for the swiper
 
 let sliderSwipe = 0;
 let currentPage = 1;
@@ -15,6 +16,7 @@ let currentlyRequestedItems = 14;
 let isLoading = false;
 let allProductsLoaded = false;
 let allLoadedProducts = [];
+let promoDisplayed = false; // Flag to track if the promo cell has been displayed
 
 menu.querySelectorAll('ul li a[href^="#"]').forEach((link) => {
   link.addEventListener("click", (e) => {
@@ -54,10 +56,10 @@ document.addEventListener("keydown", (e) => {
 });
 
 function createProductCards(products) {
-  const wrapper = document.getElementById("product-wrapper");
-  wrapper.innerHTML = "";
+  productWrapper.innerHTML = ""; // Clear the existing slides
 
-  products.forEach((product) => {
+  products.slice(0, INITIAL_SLIDER_ITEMS).forEach((product) => {
+    // Limit to INITIAL_SLIDER_ITEMS
     const slide = document.createElement("div");
     slide.className = "swiper-slide";
 
@@ -92,8 +94,13 @@ function createProductCards(products) {
       </div>
     `;
 
-    wrapper.appendChild(slide);
+    productWrapper.appendChild(slide);
   });
+
+  // Initialize or update Swiper after the initial set of slides
+  if (window.productSwiper) {
+    window.productSwiper.update();
+  }
 }
 
 async function fetchProducts(pageNumber, pageSize) {
@@ -107,16 +114,11 @@ async function fetchProducts(pageNumber, pageSize) {
     const data = await response.json();
 
     if (data && data.data && Array.isArray(data.data)) {
-      createProductCards(data.data);
-
-      if (window.productSwiper) {
-        window.productSwiper.update();
-      }
+      return data; // Return the entire data object
     } else {
       console.error("Unexpected data structure:", data);
+      return { data: [] }; // Return an empty array to avoid errors
     }
-
-    return data;
   } catch (error) {
     console.error("Error fetching products:", error);
     document.getElementById("product-wrapper").innerHTML = `
@@ -124,6 +126,7 @@ async function fetchProducts(pageNumber, pageSize) {
         Unable to load products. Please try again later.
       </div>
     `;
+    return { data: [] }; // Return an empty array in case of an error
   }
 }
 
@@ -163,11 +166,13 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   });
 
-  fetchProducts(1, SLIDER_ITEMS);
+  fetchProducts(1, INITIAL_SLIDER_ITEMS).then((response) => {
+    createProductCards(response.data);
+  });
 });
 
 arrow.addEventListener("click", () => {
-  if (sliderSwipe === SLIDER_ITEMS - 1) {
+  if (sliderSwipe === INITIAL_SLIDER_ITEMS - 1) {
     sliderSwipe = 0;
   } else {
     sliderSwipe++;
@@ -199,6 +204,7 @@ function updateProgressBar(swiper) {
 
 function renderProductGrid(products) {
   productGrid.innerHTML = "";
+  promoDisplayed = false; // Reset the flag when re-rendering the grid
 
   if (products.length === 0) {
     productGrid.innerHTML = "<p>No products found.</p>";
@@ -217,7 +223,7 @@ function renderProductGrid(products) {
       </div>
     `;
 
-    if (index % pageSize === 5 && index !== 0) {
+    if (index % pageSize === 5 && index !== 0 && !promoDisplayed) {
       const promoCell = document.createElement("div");
       promoCell.className = "promo-cell";
       promoCell.innerHTML = `<span>
@@ -227,6 +233,7 @@ function renderProductGrid(products) {
         <button class="promo-button">Check this out &nbsp; &gt;</button>
       `;
       productGrid.appendChild(promoCell);
+      promoDisplayed = true; // Set the flag to true after displaying the promo
     }
 
     productGrid.appendChild(productCard);
@@ -275,7 +282,6 @@ function loadMoreProducts() {
 
       if (response.data && response.data.length > 0) {
         allLoadedProducts = [...response.data];
-
         renderProductGrid(allLoadedProducts);
 
         if (response.data.length < currentlyRequestedItems) {
