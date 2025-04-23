@@ -2,6 +2,9 @@ const BASE_URL = "https://brandstestowy.smallhost.pl/api";
 const SLIDER_ITEMS = 10;
 
 const menu = document.getElementById("menu");
+const menuToggle = document.getElementById("menuToggle");
+const menuClose = document.getElementById("menuClose");
+const overlay = document.getElementById("menuOverlay");
 const arrow = document.getElementById("swiper-button-next");
 const productGrid = document.getElementById("productGrid");
 
@@ -18,10 +21,36 @@ menu.querySelectorAll('ul li a[href^="#"]').forEach((link) => {
     e.preventDefault();
     const id = link.getAttribute("href").substring(1);
     const section = document.getElementById(id);
+    closeMenu();
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
     }
   });
+});
+
+function openMenu() {
+  menu.classList.add("show");
+  overlay.classList.add("show");
+  menuClose.style.display = "block";
+  menuClose.style.zIndex = "9999";
+  menuToggle.style.display = "none";
+}
+
+function closeMenu() {
+  menu.classList.remove("show");
+  overlay.classList.remove("show");
+  menuClose.style.display = "none";
+  menuToggle.style.display = "block";
+}
+
+menuToggle.addEventListener("click", openMenu);
+menuClose?.addEventListener("click", closeMenu);
+overlay.addEventListener("click", closeMenu);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Tab" && menu.classList.contains("show")) {
+    closeMenu();
+  }
 });
 
 function createProductCards(products) {
@@ -182,16 +211,20 @@ function renderProductGrid(products) {
     productCard.innerHTML = `
       <div class="product-image">
         <img src="${product.image}" alt="${product.text}">
-        <div class="badge id">${product.id}</div>
+        <div class="product-id">ID: ${
+          product.id < 10 ? `0${product.id}` : product.id
+        }</div>
       </div>
     `;
 
     if (index % pageSize === 5 && index !== 0) {
       const promoCell = document.createElement("div");
       promoCell.className = "promo-cell";
-      promoCell.innerHTML = `
+      promoCell.innerHTML = `<span>
+        <p>FORMA'SINT.</p>
         <div class="promo-title">You'll look and feel like the champion.</div>
-        <button class="promo-button">Check it out</button>
+        </span>
+        <button class="promo-button">Check this out &nbsp; &gt;</button>
       `;
       productGrid.appendChild(promoCell);
     }
